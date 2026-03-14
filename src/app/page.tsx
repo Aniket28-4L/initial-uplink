@@ -15,9 +15,9 @@ const SKILLS = [
   { name: 'Kubernetes',      level: 70, cat: 'Orchestration' },
   { name: 'Java',            level: 72, cat: 'Programming' },
   { name: 'Bash / YAML',     level: 70, cat: 'Scripting' },
-  { name: 'Terraform',       level: 68, cat: 'IaC' },
-  { name: 'AWS',             level: 65, cat: 'Cloud' },
-  { name: 'Jenkins',         level: 60, cat: 'CI/CD' },
+  { name: 'Terraform',       level: 70, cat: 'IaC' },
+  { name: 'AWS',             level: 70, cat: 'Cloud' },
+  { name: 'Jenkins',         level: 70, cat: 'CI/CD' },
 ]
 
 const PROJECTS = [
