@@ -84,6 +84,14 @@ const CERTS = [
 
 const NAV = ['About', 'Skills', 'Projects', 'Experience', 'Contact']
 
+/** Hero “Connect” modal — update X/Instagram hrefs if your handles differ. */
+const CONNECT_SOCIALS = [
+  { label: 'LinkedIn — Message', href: 'https://www.linkedin.com/in/aniket-pandey-1b3a59291' },
+  { label: 'X (Twitter)', href: 'https://x.com/aniketpandey4723k' },
+  { label: 'Instagram', href: 'https://instagram.com/aniketpandey4723k' },
+  { label: 'GitHub', href: 'https://github.com/Aniket28-4L' },
+]
+
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 
 function useSectionInView(id: string) {
@@ -97,6 +105,72 @@ function useSectionInView(id: string) {
     return () => obs.disconnect()
   }, [])
   return { ref, visible }
+}
+
+function ConnectModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!open) return
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onEsc)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onEsc)
+      document.body.style.overflow = prev
+    }
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center p-6"
+      style={{ background: 'rgba(14,13,12,0.75)', backdropFilter: 'blur(8px)' }}
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="connect-modal-title"
+        className="card w-full max-w-md p-6 relative"
+        style={{ borderColor: 'rgba(139,58,58,0.25)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 font-mono text-[10px] transition-colors"
+          style={{ color: '#5a5248' }}
+          aria-label="Close"
+        >
+          ✕
+        </button>
+        <p className="section-label mb-2">Social</p>
+        <h2 id="connect-modal-title" className="font-serif text-2xl mb-6" style={{ color: '#f0ece6' }}>
+          Connect
+        </h2>
+        <p className="text-sm mb-6 leading-relaxed" style={{ color: '#5a5248' }}>
+          Choose where you’d like to reach out — LinkedIn opens my profile where you can use <span style={{ color: '#9a9086' }}>Message</span>.
+        </p>
+        <div className="flex flex-col gap-3">
+          {CONNECT_SOCIALS.map(s => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline text-center"
+            >
+              {s.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 // ─── Navbar ──────────────────────────────────────────────────────────────────
@@ -165,6 +239,7 @@ function Navbar() {
 // ─── Hero ────────────────────────────────────────────────────────────────────
 
 function Hero() {
+  const [connectOpen, setConnectOpen] = useState(false)
   const [typed, setTyped] = useState('')
   const roles = ['DevOps Practitioner', 'Cloud Engineer', 'Automation Specialist']
   const roleIdx = useRef(0)
@@ -231,7 +306,12 @@ function Hero() {
               <a href="mailto:aniketpandey4723k@gmail.com" className="btn-outline">
                 Get in Touch
               </a>
+              <button type="button" className="btn-outline" onClick={() => setConnectOpen(true)}>
+                Connect
+              </button>
             </div>
+
+            <ConnectModal open={connectOpen} onClose={() => setConnectOpen(false)} />
 
             {/* Quick stats */}
             <div className="flex gap-8">
